@@ -233,4 +233,5 @@ Checking test.c ...
 
 Running the above program with ASAN enabled yields the following, which points
 you to the line where the violation was detected:
-![asan example](pics/asan_example.svg)
+
+![asan example](pics/asan_terminalizer_example.gif)
