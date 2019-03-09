@@ -133,7 +133,8 @@ them, and as many of them as practical!
 * [cppcheck](https://github.com/danmar/cppcheck) - classic C/C++ static analysis
 
 * [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) - nice set of
-  linting/security related detections. Run it with the checkers not associated with a particular coding convention like so:
+  linting/security related detections. Run it with the checkers not associated
+  with a particular coding convention like so:
   `clang-tidy-7 -checks="performance-*,portability-*,readability-*" ./**/*.c`
 
 * [scan-build](https://clang-analyzer.llvm.org/scan-build.html) - another clang
@@ -188,4 +189,48 @@ gcov + lcov. Lots of information and tutorials on how to do that.
 
 ## 7. Use runtime sanitizers
 
-Todo ASAN.
+These incur a runtime penalty (memory and execution speed, up to 30% allegedly),
+so should be used judiciously in production. However, it can be enabled for unit
+tests that are not used to evaluate relative or absolute computation cost for
+the software under test (in those cases I think I'd use a separate test system).
+
+The three I recommend are:
+* [Address
+  Sanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer)
+* [Leak
+  Sanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizer)
+* [Undefined Behavior
+  Sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
+
+In gcc and clang you can enable these when building an executable by applying
+these flags to your compile + link commands: `-fsanitize=address -fsantize=leak
+-fsanitize=undefined`
+
+Here's an example of what ASAN can do for you:
+
+```c
+void foo_fn(char *arg) {
+    // overflows `foo` in the outer stack frame!
+    arg[4] = 1;
+}
+
+int main(int argc, char **argv) {
+    char foo[3];
+
+    foo_fn(foo);
+
+    return 0;
+}
+```
+
+*Note that cppcheck detects the above error:*
+
+```bash
+➜ cppcheck --enable=all test.c
+Checking test.c ...
+[test.c:8] -> [test.c:2]: (error) Array 'foo[3]' accessed at index 4, which is out of bounds.
+```
+
+Running the above program with ASAN enabled yields the following, which points
+you to the line where the violation was detected:
+![asan example](pics/asan_example.svg)
