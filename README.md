@@ -125,7 +125,26 @@ brave!)
 
 ## 5. Static analysis
 
-TODO `scan-build`...
+Static analysis tools (outside of what your C compiler provides) can detect some
+types of potential error conditions. They're pretty cost-free to run since they
+execute separately from program compilation, so it's usually worthwhile to use
+them, and as many of them as practical!
+
+* [cppcheck](https://github.com/danmar/cppcheck) - classic C/C++ static analysis
+
+* [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) - nice set of
+  linting/security related detections. Run it with the checkers not associated with a particular coding convention like so:
+  `clang-tidy-7 -checks="performance-*,portability-*,readability-*" ./**/*.c`
+
+* [scan-build](https://clang-analyzer.llvm.org/scan-build.html) - another clang
+  analyzer utility that does fairly sophisticated program level static analysis.
+  *Note: it can be somewhat difficult to get scan-build operational when
+  cross-compiling C programs. Don't give up! on programs of non-trivial size
+  scan-build for me has without fail detected serious errors that were missed by
+  manual or unit testing.*
+
+* [flawfinder](https://dwheeler.com/flawfinder/) - relatively naive but useful
+  tool that can identify dangerous patterns used in your code. Has a patch mode!
 
 ## 6. Test your software
 
