@@ -205,7 +205,7 @@ some I've used successfully, in order of my personal preference:
 
 |Framework|Features|Comment|
 |---|---|---|
-|https://github.com/cpptest/cpptest|Asserts, test runner, mocks, memory leak detection|Moderate learning curve. Very powerful and concise mocking system|
+|https://github.com/cpputest/cpputest|Asserts, test runner, mocks, memory leak detection|Moderate learning curve. Very powerful and concise mocking system|
 |https://github.com/google/googletest|Asserts, test runner, mocks, leak checker|Very popular and widely used. Simple + concise syntax|
 |https://github.com/cgreen-devs/cgreen|Asserts, test runner, mocks, test auto-discovery|Featureful, relatively concise|
 |https://github.com/ThrowTheSwitch/Unity|Asserts, test runner|Simple to set up|
