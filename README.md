@@ -2,6 +2,8 @@
 
 Small collection of notes for myself on using the C programming language.
 
+<!-- vim-markdown-toc GFM -->
+
 - [1. C style / usage notes](#1-c-style--usage-notes)
   - [1.1 Use struct operations for struct data classes](#11-use-struct-operations-for-struct-data-classes)
     - [1.1.1 Initializing structures](#111-initializing-structures)
@@ -13,6 +15,8 @@ Small collection of notes for myself on using the C programming language.
 - [6. Test your software](#6-test-your-software)
 - [6.a. Test coverage](#6a-test-coverage)
 - [7. Use runtime sanitizers](#7-use-runtime-sanitizers)
+
+<!-- vim-markdown-toc -->
 
 ## 1. C style / usage notes
 
