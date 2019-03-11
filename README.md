@@ -2,13 +2,29 @@
 
 Small collection of notes for myself on using the C programming language.
 
-## 1. Use struct operations for struct data classes
+- [1. C style / usage notes](#1-c-style--usage-notes)
+  - [1.1 Use struct operations for struct data classes](#11-use-struct-operations-for-struct-data-classes)
+    - [1.1.1 Initializing structures](#111-initializing-structures)
+    - [1.1.2. Duplicating structures](#112-duplicating-structures)
+  - [1.2. Use local blocks for scoping](#12-use-local-blocks-for-scoping)
+  - [1.3. memcpy size parameter](#13-memcpy-size-parameter)
+- [4. Compiler warnings](#4-compiler-warnings)
+- [5. Static analysis](#5-static-analysis)
+- [6. Test your software](#6-test-your-software)
+- [6.a. Test coverage](#6a-test-coverage)
+- [7. Use runtime sanitizers](#7-use-runtime-sanitizers)
+
+## 1. C style / usage notes
+
+Set of notes around useful (to me) C idioms + patterns.
+
+### 1.1 Use struct operations for struct data classes
 
 C permits arbitrary operations on any addressable (or non-addressable 🤦)
 memory. When operating on `struct` data types, I prefer using C99 struct
 operations rather than traditional pointer memory access.
 
-### 1. Initializing structures
+#### 1.1.1 Initializing structures
 
 ```c
 struct foo_s {
@@ -32,7 +48,7 @@ struct foo_x foo = {
 // except for designated fields
 ```
 
-### 2. Duplicating structures
+#### 1.1.2. Duplicating structures
 
 ```c
 const struct foo_s foo2 = {
@@ -51,7 +67,7 @@ void foo_fn(struct foo_s *foo_ptr) {
 }
 ```
 
-## 2. Use local blocks for scoping
+### 1.2. Use local blocks for scoping
 
 Variable lifetimes are determined by the compiler; stack allocated variables may
 not be "garbage collected" until the stack frame pops, for example.
@@ -71,7 +87,7 @@ void foo_fn(int foo) {
             break;
     }
 
-    // preferrable
+    // preferable
     switch(foo) {
         case 2:
         {
@@ -82,6 +98,27 @@ void foo_fn(int foo) {
     }
 }
 ```
+
+### 1.3. memcpy size parameter
+
+In most cases you want to use the destination object's size:
+
+```c
+struct foo {
+    int a;
+};
+struct foo foo1, foo2;
+
+// very fragile
+memcpy(&foo1, &foo2, 4);
+
+// pretty fragile; relies on `foo1`s type staying the same forever
+memcpy(&foo1, &foo2, sizeof(struct foo));
+
+// best; always try to use destination size
+memcpy(&foo1, &foo2, sizeof(foo1));
+```
+
 
 ## 4. Compiler warnings
 
@@ -99,28 +136,28 @@ https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
 
 https://clang.llvm.org/docs/DiagnosticsReference.html
 
-* `-Wall -Werror` minimum, more is better (`-Weverything` on clang... for the
+- `-Wall -Werror` minimum, more is better (`-Weverything` on clang... for the
 brave!)
-* `-Werror=conversion` - C is statically but weakly typed; the compiler will
+- `-Werror=conversion` - C is statically but weakly typed; the compiler will
   insert implicit type conversions based on variable types in an expression.
   This can result in subtle but disastrous data value effects. This warning can
   help avoid some of those errors.
-* `-Werror=undef` - undefined indentifiers resolve to `0` when the compiler
+- `-Werror=undef` - undefined identifiers resolve to `0` when the compiler
   checks `#if` expressions. This can lead to confusing behavior, so prevent it!
-* `-Werror=shadow` - prevents confusing reuse of variable names
-* `-Werror=double-promotion` - only relevant for targets without efficient
+- `-Werror=shadow` - prevents confusing reuse of variable names
+- `-Werror=double-promotion` - only relevant for targets without efficient
   `double` hardware. Error if a double constant (decimal value lacking the `f`
   suffix) or double conversion occurs!
-* `-Werror=jump-misses-init` - can detect odd control flow issues, and generally
+- `-Werror=jump-misses-init` - can detect odd control flow issues, and generally
   guides you against unintuitive design
-* `-Werror=logical-op` - bit-wise operators have counter intuitive precedence.
+- `-Werror=logical-op` - bit-wise operators have counter intuitive precedence.
   Error to enforce reasonable parenthesis usage.
-* `-Werror=format=2` - additional safety checks on printf/scanf type format
+- `-Werror=format=2` - additional safety checks on printf/scanf type format
   parameters
-* `-Werror=duplicated-cond` - same conditional twice, not usually beneficial
-* `-Werror=duplicated-branches` - same expression in two conditional branches,
+- `-Werror=duplicated-cond` - same conditional twice, not usually beneficial
+- `-Werror=duplicated-branches` - same expression in two conditional branches,
   violates Don't Repeat Yourself
-* `-Werror=null-dereference` - pretty rare that this trips usefully, but can
+- `-Werror=null-dereference` - pretty rare that this trips usefully, but can
   catch some simple typos etc.
 
 ## 5. Static analysis
@@ -130,21 +167,21 @@ types of potential error conditions. They're pretty cost-free to run since they
 execute separately from program compilation, so it's usually worthwhile to use
 them, and as many of them as practical!
 
-* [cppcheck](https://github.com/danmar/cppcheck) - classic C/C++ static analysis
+- [cppcheck](https://github.com/danmar/cppcheck) - classic C/C++ static analysis
 
-* [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) - nice set of
+- [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) - nice set of
   linting/security related detections. Run it with the checkers not associated
   with a particular coding convention like so:
   `clang-tidy-7 -checks="performance-*,portability-*,readability-*" ./**/*.c`
 
-* [scan-build](https://clang-analyzer.llvm.org/scan-build.html) - another clang
+- [scan-build](https://clang-analyzer.llvm.org/scan-build.html) - another clang
   analyzer utility that does fairly sophisticated program level static analysis.
   *Note: it can be somewhat difficult to get scan-build operational when
   cross-compiling C programs. Don't give up! on programs of non-trivial size
   scan-build for me has without fail detected serious errors that were missed by
   manual or unit testing.*
 
-* [flawfinder](https://dwheeler.com/flawfinder/) - relatively naive but useful
+- [flawfinder](https://dwheeler.com/flawfinder/) - relatively naive but useful
   tool that can identify dangerous patterns used in your code. Has a patch mode!
 
 ## 6. Test your software
@@ -152,8 +189,8 @@ them, and as many of them as practical!
 > *Chris Lattner,
 cited from this
 [UB white paper](http://www.yodaiken.com/wp-content/uploads/2018/05/ub-1.pdf)* :
-
-> *[...] UB is an inseperable part of C programming, [...] this is a depressing
+>
+> *[...] UB is an inseparable part of C programming, [...] this is a depressing
 and faintly terrifying thing. The tooling built around the C family of languages
 helps make the situation less bad, but it is still pretty bad.*
 
@@ -166,13 +203,13 @@ that exercise inputs of functions.
 There are *MANY* unit test frameworks that can be used for C software. These are
 some I've used successfully, in order of my personal preference:
 
-|Framwork|Features|Comment|
+|Framework|Features|Comment|
 |---|---|---|
 |https://github.com/cpptest/cpptest|Asserts, test runner, mocks, memory leak detection|Moderate learning curve. Very powerful and concise mocking system|
 |https://github.com/google/googletest|Asserts, test runner, mocks, leak checker|Very popular and widely used. Simple + concise syntax|
 |https://github.com/cgreen-devs/cgreen|Asserts, test runner, mocks, test auto-discovery|Featureful, relatively concise|
 |https://github.com/ThrowTheSwitch/Unity|Asserts, test runner|Simple to set up|
-|https://github.com/ThrowTheSwitch/CMock|Mock generator for Unity|Simple but verbose and boilerplately mock generater|
+|https://github.com/ThrowTheSwitch/CMock|Mock generator for Unity|Simple but verbose and boilerplately mock generator|
 |https://github.com/vmg/clar|Asserts, test runner|**Very** simple; used by [libgit2](https://github.com/libgit2/libgit2). **No mocking support**|
 
 ## 6.a. Test coverage
@@ -195,11 +232,11 @@ tests that are not used to evaluate relative or absolute computation cost for
 the software under test (in those cases I think I'd use a separate test system).
 
 The three I recommend are:
-* [Address
+- [Address
   Sanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer)
-* [Leak
+- [Leak
   Sanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizer)
-* [Undefined Behavior
+- [Undefined Behavior
   Sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 
 In gcc and clang you can enable these when building an executable by applying
