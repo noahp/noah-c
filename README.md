@@ -123,7 +123,6 @@ memcpy(&foo1, &foo2, sizeof(struct foo));
 memcpy(&foo1, &foo2, sizeof(foo1));
 ```
 
-
 ## 4. Compiler warnings
 
 Compiler warnings are a cheap and simple way to increase correctness.
@@ -244,7 +243,7 @@ The three I recommend are:
   Sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 
 In gcc and clang you can enable these when building an executable by applying
-these flags to your compile + link commands: `-fsanitize=address -fsantize=leak
+these flags to your compile + link commands: `-fsanitize=address -fsanitize=leak
 -fsanitize=undefined`
 
 Here's an example of what ASAN can do for you:
