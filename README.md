@@ -52,6 +52,10 @@ struct foo_x foo = {
 // except for designated fields
 ```
 
+Note that this approach won't initialize padding
+(see [here](https://www.anmolsarma.in/post/stop-struct-memset/)). This is only
+a problem if you're passing your data across a trust boundary, but be aware.
+
 #### 1.1.2. Duplicating structures
 
 ```c
