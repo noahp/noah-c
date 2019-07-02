@@ -201,6 +201,10 @@ them, and as many of them as practical!
   scan-build for me has without fail detected serious errors that were missed by
   manual or unit testing.*
 
+- [ikos](https://github.com/NASA-SW-VnV/ikos) - LLVM backed static analyzer
+  developed by NASA. Pretty sophisticated. Similar usage to scan-build, see
+  [ikos-scan](https://github.com/NASA-SW-VnV/ikos/blob/master/analyzer/README.md#analyze-a-whole-project-with-ikos-scan).
+
 - [flawfinder](https://dwheeler.com/flawfinder/) - relatively naive but useful
   tool that can identify dangerous patterns used in your code. Has a patch mode!
 
