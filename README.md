@@ -45,11 +45,24 @@ memset(foo, 0, sizeof(foo));
 *((char *)&foo) = 1234;  // initialize... a?
 
 // struct operations approach
-struct foo_x foo = {
+struct foo_s foo = {
     .a = 1234,  // always use designated initializers
 };
 // foo is initialized by the standard to all default values (typically zero)
 // except for designated fields
+
+// assigning after declaration is permitted, but requires a cast
+struct foo_s bar = { 0 };
+
+bar = (struct foo_s) {
+    .bar = {
+        .c = 12,
+    },
+};
+// cast using __typeof__ :
+bar = (__typeof__(bar)) {
+    .a = 34,
+};
 ```
 
 Note that this approach won't initialize padding
@@ -66,10 +79,10 @@ struct foo_s foo2 = {
     },
 };
 
-// we can initialize from another structure
+// we can copy from another structure
 struct foo_s foo = foo2;
 
-// we can also initialize from a function parameter input
+// we can also copy from a function parameter input
 void foo_fn(struct foo_s *foo_ptr) {
     struct foo_s local_foo = *foo_ptr;
 }
