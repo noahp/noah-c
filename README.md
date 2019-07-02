@@ -59,14 +59,14 @@ a problem if you're passing your data across a trust boundary, but be aware.
 #### 1.1.2. Duplicating structures
 
 ```c
-const struct foo_s foo2 = {
+struct foo_s foo2 = {
     .a = 4321,
     .bar = {
         .c = 2,
     },
 };
 
-// we can initialize from a constant
+// we can initialize from another structure
 struct foo_s foo = foo2;
 
 // we can also initialize from a function parameter input
