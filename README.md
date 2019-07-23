@@ -10,6 +10,7 @@ Small collection of notes for myself on using the C programming language.
     - [1.1.2. Duplicating structures](#112-duplicating-structures)
   - [1.2. Use local blocks for scoping](#12-use-local-blocks-for-scoping)
   - [1.3. memcpy size parameter](#13-memcpy-size-parameter)
+- [2. Use `ccache`](#2-use-ccache)
 - [4. Compiler warnings](#4-compiler-warnings)
 - [5. Static analysis](#5-static-analysis)
 - [6. Test your software](#6-test-your-software)
@@ -140,6 +141,18 @@ memcpy(&foo1, &foo2, sizeof(struct foo));
 memcpy(&foo1, &foo2, sizeof(foo1));
 ```
 
+## 2. Use `ccache`
+
+These utilities cache compiler output, so when rebuilding with the same
+includes/flags/source/compiler, you get a cached result instead of spending CPU
+recompiling to the same object. Super speed boost and I can't recommend them
+enough:
+- [ccache](https://github.com/ccache/ccache) - actively developed, works well in
+  my experience (reliable and performant)
+- [sccache](https://github.com/mozilla/sccache) - supports distributed builds
+  and remote storage (S3 etc). Supports rustc too. Slightly slower (uses a more
+  rigorous hash computation)
+
 ## 4. Compiler warnings
 
 Compiler warnings are a cheap and simple way to increase correctness.
@@ -152,9 +165,13 @@ over encumbered by them.
 The below warnings are gcc flags; clang has similar features (and many
 additional flags that can be useful, I recommend reading through them!).
 
-https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+Compiler references:
 
-https://clang.llvm.org/docs/DiagnosticsReference.html
+- https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+- https://clang.llvm.org/docs/DiagnosticsReference.html
+
+*Note- these examples use the `-Werror=*` form, which will cause an error even
+if `-Werror` is not enabled*
 
 - `-Wall -Werror` minimum, more is better (`-Weverything` on clang... for the
 brave!)
@@ -162,6 +179,8 @@ brave!)
   insert implicit type conversions based on variable types in an expression.
   This can result in subtle but disastrous data value effects. This warning can
   help avoid some of those errors.
+- `-Werror=sign-conversion` - probably will emit a lot of errors, but can
+  definitely catch some weird sign-extension etc. bugs
 - `-Werror=undef` - undefined identifiers resolve to `0` when the compiler
   checks `#if` expressions. This can lead to confusing behavior, so prevent it!
 - `-Werror=shadow` - prevents confusing reuse of variable names
@@ -246,7 +265,35 @@ It can be *very* helpful when guiding your testing efforts, especially if you're
 not using a strict TDD process.
 
 Tracking test coverage in your build system / CI is usually pretty simple with
-gcov + lcov. Lots of information and tutorials on how to do that.
+gcov + lcov.
+
+`genhtml`, part of lcov package, emits an html format of lcov coverage reports,
+which is a little easier to read when examining lots of files.
+
+Basic steps:
+
+```bash
+# compile with coverage enabled
+gcc -coverage <mycfile.c>
+
+# run your test program
+
+# now run gcov or lcov etc on the output, eg:
+lcov --rc lcov_branch_coverage=1 -b <source top> -c -d <object directory top> \
+ -o coverage.info
+
+# lcov supports filtering out eg. test source file data with the '-e' option
+lcov --rc lcov_branch_coverage=1 -b <source top> -e coverage.info \
+ <test-source-dir>/** -o coverage.info.filtered
+
+# produce html report
+genhtml --rc genhtml_med_limit=50 --rc genhtml_hi_limit=75 --branch-coverage \
+ -p <source top> -o coverage-report-html coverage.info.filtered
+```
+
+Shoutout to [fastcov](https://github.com/RPGillespie6/fastcov), gcc-9 only alas,
+but for medium size projects and larger (> ~50 C files) can make a big
+difference.
 
 ## 7. Use runtime sanitizers
 
