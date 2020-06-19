@@ -4,18 +4,19 @@ Small collection of notes for myself on using the C programming language.
 
 <!-- vim-markdown-toc GFM -->
 
-- [1. C style / usage notes](#1-c-style--usage-notes)
-  - [1.1 Use struct operations for struct data classes](#11-use-struct-operations-for-struct-data-classes)
-    - [1.1.1 Initializing structures](#111-initializing-structures)
-    - [1.1.2. Duplicating structures](#112-duplicating-structures)
-  - [1.2. Use local blocks for scoping](#12-use-local-blocks-for-scoping)
-  - [1.3. memcpy size parameter](#13-memcpy-size-parameter)
-- [2. Use `ccache`](#2-use-ccache)
-- [4. Compiler warnings](#4-compiler-warnings)
-- [5. Static analysis](#5-static-analysis)
-- [6. Test your software](#6-test-your-software)
-- [6.a. Test coverage](#6a-test-coverage)
-- [7. Use runtime sanitizers](#7-use-runtime-sanitizers)
+- [🌊 Notes on using the C language](#-notes-on-using-the-c-language)
+  - [1. C style / usage notes](#1-c-style--usage-notes)
+    - [1.1 Use struct operations for struct data classes](#11-use-struct-operations-for-struct-data-classes)
+      - [1.1.1 Initializing structures](#111-initializing-structures)
+      - [1.1.2. Duplicating structures](#112-duplicating-structures)
+    - [1.2. Use local blocks for scoping](#12-use-local-blocks-for-scoping)
+    - [1.3. memcpy size parameter](#13-memcpy-size-parameter)
+  - [2. Use `ccache`](#2-use-ccache)
+  - [4. Compiler warnings](#4-compiler-warnings)
+  - [5. Static analysis](#5-static-analysis)
+  - [6. Test your software](#6-test-your-software)
+  - [6.a. Test coverage](#6a-test-coverage)
+  - [7. Use runtime sanitizers](#7-use-runtime-sanitizers)
 
 <!-- vim-markdown-toc -->
 
@@ -219,6 +220,9 @@ them, and as many of them as practical!
   cross-compiling C programs. Don't give up! on programs of non-trivial size
   scan-build for me has without fail detected serious errors that were missed by
   manual or unit testing.*
+
+- [lizard](https://github.com/terryyin/lizard) - easy to use complexity checker
+  that works on many languages, including c/cpp
 
 - [ikos](https://github.com/NASA-SW-VnV/ikos) - LLVM backed static analyzer
   developed by NASA. Pretty sophisticated. Similar usage to scan-build, see
