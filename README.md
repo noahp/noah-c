@@ -11,6 +11,7 @@ Small collection of notes for myself on using the C programming language.
       - [1.1.2. Duplicating structures](#112-duplicating-structures)
     - [1.2. Use local blocks for scoping](#12-use-local-blocks-for-scoping)
     - [1.3. memcpy size parameter](#13-memcpy-size-parameter)
+    - [1.3. size of c object at compile time](#13-size-of-c-object-at-compile-time)
   - [2. Use `ccache`](#2-use-ccache)
   - [4. Compiler warnings](#4-compiler-warnings)
   - [5. Static analysis](#5-static-analysis)
@@ -142,12 +143,48 @@ memcpy(&foo1, &foo2, sizeof(struct foo));
 memcpy(&foo1, &foo2, sizeof(foo1));
 ```
 
+### 1.3. size of c object at compile time
+
+Show the size of a c object via warning messages at compile time (can be useful
+to set `_Static_assert`s).
+
+```c
+struct foo {
+  int a;
+  unsigned b : 12;
+  double c;
+};
+
+// uses -Wint-conversion
+static char (*_boom)[sizeof(struct foo)] = 1;
+// uses -Wformat
+  void kaboom_print(void) { printf("%d", _boom); }
+```
+
+Example:
+
+```plaintext
+test.c:70:46: warning: initialization of ‘char (*)[16]’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+   70 |   static char (*_boom)[sizeof(struct foo)] = 1;
+      |                                              ^
+test.c: In function ‘kaboom_print’:
+test.c:72:38: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘char (*)[16]’ [-Wformat=]
+   72 |   void kaboom_print(void) { printf("%d", _boom); }
+      |                                     ~^   ~~~~~
+      |                                      |   |
+      |                                      int char (*)[16]
+```
+
+Depending on your compiler / flags, you may need the `kaboom_print` + `-Wformat`
+to get a useful message.
+
 ## 2. Use `ccache`
 
 These utilities cache compiler output, so when rebuilding with the same
 includes/flags/source/compiler, you get a cached result instead of spending CPU
 recompiling to the same object. Super speed boost and I can't recommend them
 enough:
+
 - [ccache](https://github.com/ccache/ccache) - actively developed, works well in
   my experience (reliable and performant)
 - [sccache](https://github.com/mozilla/sccache) - supports distributed builds
