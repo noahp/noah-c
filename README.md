@@ -11,7 +11,7 @@ Small collection of notes for myself on using the C programming language.
       - [1.1.2. Duplicating structures](#112-duplicating-structures)
     - [1.2. Use local blocks for scoping](#12-use-local-blocks-for-scoping)
     - [1.3. memcpy size parameter](#13-memcpy-size-parameter)
-    - [1.3. size of c object at compile time](#13-size-of-c-object-at-compile-time)
+    - [1.4. size of c object at compile time](#14-size-of-c-object-at-compile-time)
   - [2. Use `ccache`](#2-use-ccache)
   - [4. Compiler warnings](#4-compiler-warnings)
   - [5. Static analysis](#5-static-analysis)
@@ -143,7 +143,7 @@ memcpy(&foo1, &foo2, sizeof(struct foo));
 memcpy(&foo1, &foo2, sizeof(foo1));
 ```
 
-### 1.3. size of c object at compile time
+### 1.4. size of c object at compile time
 
 Show the size of a c object via warning messages at compile time (can be useful
 to set `_Static_assert`s).
