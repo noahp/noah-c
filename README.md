@@ -18,6 +18,7 @@ Small collection of notes for myself on using the C programming language.
   - [6. Test your software](#6-test-your-software)
   - [6.a. Test coverage](#6a-test-coverage)
   - [7. Use runtime sanitizers](#7-use-runtime-sanitizers)
+  - [8. executable `.so`](#8-executable-so)
 
 <!-- vim-markdown-toc -->
 
@@ -384,3 +385,49 @@ Running the above program with ASAN enabled yields the following, which points
 you to the line where the violation was detected:
 
 ![asan example](pics/asan_terminalizer_example.gif)
+
+## 8. executable `.so`
+
+Shared libraries can be built with an entrance point, allowing them to be run
+standalone (eg to display a version check etc).
+
+glibc does this:
+
+```bash
+$ /lib/x86_64-linux-gnu/libc.so.6 --version
+GNU C Library (Ubuntu GLIBC 2.30-0ubuntu2.1) stable release version 2.30.
+Copyright (C) 2019 Free Software Foundation, Inc.
+example:
+```
+
+Here's an example:
+
+
+`foo.c`:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+#define VERSION "0.1.0"
+
+int foo(int c) {
+    return c * 2;
+}
+
+// note- because we use -nostartfiles we don't get argc/argv
+void version(void) {
+    printf("foo lib version: " VERSION "\n");
+    exit(0);
+}
+```
+
+Build + run:
+
+```bash
+# set the entry point to 'version'
+$ gcc -shared -fPIC -pie foo.c -o foo.so -nostartfiles --entry version
+# running the library causes the entrypoint to execute
+$ ./foo.so
+foo lib version: 0.1.0
+```
