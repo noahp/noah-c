@@ -24,6 +24,7 @@ Small collection of notes for myself on using the C programming language.
   - [8. executable `.so`](#8-executable-so)
   - [9. `-fstack-protector`](#9--fstack-protector)
   - [10. Hardening checker](#10-hardening-checker)
+  - [11. `printf` wrappers](#11-printf-wrappers)
 
 <!-- vim-markdown-toc -->
 
@@ -511,3 +512,38 @@ To get the tool on ubuntu, run:
 ```bash
 sudo apt install devscripts
 ```
+
+## 11. `printf` wrappers
+
+Some libraries will want to wrap `printf`, eg to insert a `__FILE__` value, or
+add ansi color codes, etc.
+
+First, full example:
+
+```c
+// log levels
+enum loglevels {
+  loglevel_debug,
+  loglevel_info,
+  loglevel_warning,
+  loglevel_error,
+}
+
+// fundamental logger, with level (eg debug, error) and filename, and format
+// string + params
+void my_log_function(int level, const char *filename, const char *fmt, ...)
+  __attribute__((format(printf, 3, 4)));
+
+// Wrapper for debug logs
+#define MY_DEBUG_LOGGER(fmt, ...) \
+  my_log_function(loglevel_debug, __FILE__, fmt, ##__VA_ARGS__)
+```
+
+As above, you may also see macros wrapper the fundamental logging function.
+There are (at least) 2 considerations to note above:
+
+1. `__attribute__((format(printf, 2, 3)))` - this allows the compiler to do
+   printf-format arg checking (eg checking types, lengths)
+2. using `##__VA_ARGS__` in the definition of a variadic macro; this permits
+   writing the macro without params: `MY_DEBUG_LOGGER("yolo")`
+   See: https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html
