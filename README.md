@@ -19,6 +19,7 @@ Small collection of notes for myself on using the C programming language.
   - [6.a. Test coverage](#6a-test-coverage)
   - [7. Use runtime sanitizers](#7-use-runtime-sanitizers)
   - [8. executable `.so`](#8-executable-so)
+  - [9. `-fstack-protector`](#9--fstack-protector)
 
 <!-- vim-markdown-toc -->
 
@@ -431,3 +432,43 @@ $ gcc -shared -fPIC -pie foo.c -o foo.so -nostartfiles --entry version
 $ ./foo.so
 foo lib version: 0.1.0
 ```
+
+## 9. `-fstack-protector`
+
+`libssp` provides canary-based stack overrun detection at runtime. The check is
+run on functions that meet certain properties (eg, `char` buffer allocated on
+stack of 8 bytes or greater), see the compiler reference for `-fstack-protector`
+and variants.
+
+This incurs a fair amount of overhead; may only be suitable for debug builds, or
+for certain non-timing or performance sensitive modules/libraries.
+
+You can also conditionally disable the check via
+`__attribute__((no_stack_protector))` .
+
+Some hosts will provide libssp libs, but on unhosted environments you may have
+to write your own. Examples:
+
+- https://antoinealb.net/programming/2016/06/01/stack-smashing-protector-on-microcontrollers.html
+- https://embeddedartistry.com/blog/2020/05/18/implementing-stack-smashing-protection-for-microcontrollers-and-embedded-artistrys-libc/
+- https://github.com/embeddedartistry/libc/blob/master/src/crt/stack_protection.c
+
+Basic recipe:
+
+1. Implement these two symbols:
+
+   ```c
+   // note: see the embedded artistry example for one that works on 32 + 64-bit
+   // architectures. this one only works properly on 32-bit.
+   uintptr_t __stack_chk_guard = 0xdeadbeef;
+
+   __attribute__((weak, noreturn)) void __stack_chk_fail(void) {
+       assert(0);
+   }
+   ```
+
+2. Compile with stack protector enabled:
+
+   ```bash
+   gcc -fstack-protector foo.c
+   ```
