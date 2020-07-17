@@ -23,6 +23,7 @@ Small collection of notes for myself on using the C programming language.
   - [7. Use runtime sanitizers](#7-use-runtime-sanitizers)
   - [8. executable `.so`](#8-executable-so)
   - [9. `-fstack-protector`](#9--fstack-protector)
+  - [10. Hardening checker](#10-hardening-checker)
 
 <!-- vim-markdown-toc -->
 
@@ -495,3 +496,18 @@ Basic recipe:
    ```bash
    gcc -fstack-protector foo.c
    ```
+
+## 10. Hardening checker
+
+For linux executables, there's a useful tool called `hardening-check` that:
+
+> Examine a given set of ELF binaries and check for several security hardening
+> features, failing if they are not all found.
+
+http://manpages.ubuntu.com/manpages/trusty/man1/hardening-check.1.html
+
+To get the tool on ubuntu, run:
+
+```bash
+sudo apt install devscripts
+```
