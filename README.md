@@ -12,6 +12,9 @@ Small collection of notes for myself on using the C programming language.
     - [1.2. Use local blocks for scoping](#12-use-local-blocks-for-scoping)
     - [1.3. memcpy size parameter](#13-memcpy-size-parameter)
     - [1.4. size of c object at compile time](#14-size-of-c-object-at-compile-time)
+    - [1.5. Return values](#15-return-values)
+      - [`int`](#int)
+      - [`ssize_t`](#ssize_t)
   - [2. Use `ccache`](#2-use-ccache)
   - [4. Compiler warnings](#4-compiler-warnings)
   - [5. Static analysis](#5-static-analysis)
@@ -180,6 +183,23 @@ test.c:72:38: warning: format ‘%d’ expects argument of type ‘int’, but a
 Depending on your compiler / flags, you may need the `kaboom_print` + `-Wformat`
 to get a useful message.
 
+### 1.5. Return values
+
+#### `int`
+
+`int` is a good return type for signaling pass/fail! Lots of C standard lib
+functions use it. Use `0` for success, `-1` or `errorno.h` values for errors.
+
+#### `ssize_t`
+
+This is a useful type if you need to return a size value or an error code, eg:
+
+```c
+//! return number of bytes loaded into output_buffer (can be less than requested
+//! size), or -1 for error
+ssize_t get_data(void *output_buffer, size_t output_buffer_size);
+```
+
 ## 2. Use `ccache`
 
 These utilities cache compiler output, so when rebuilding with the same
@@ -236,6 +256,9 @@ brave!)
 - `-Werror=duplicated-cond` - same conditional twice, not usually beneficial
 - `-Werror=duplicated-branches` - same expression in two conditional branches,
   violates Don't Repeat Yourself
+- [`-Werror=implicit-fallthrough`](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-fallthrough_003d)
+  \- catch accidental fallthroughs. use `__attribute__ ((fallthrough))` to
+  suppress in intentional fallthrough cases
 - `-Werror=null-dereference` - pretty rare that this trips usefully, but can
   catch some simple typos etc.
 
