@@ -75,9 +75,9 @@ bar = (__typeof__(bar)) {
 };
 ```
 
-Note that this approach won't initialize padding
-(see [here](https://www.anmolsarma.in/post/stop-struct-memset/)). This is only
-a problem if you're passing your data across a trust boundary, but be aware.
+Note that this approach won't initialize padding (see
+[here](https://www.anmolsarma.in/post/stop-struct-memset/)). This is only a
+problem if you're passing your data across a trust boundary, but be aware.
 
 #### 1.1.2. Duplicating structures
 
@@ -219,7 +219,7 @@ enough:
 
 Compiler warnings are a cheap and simple way to increase correctness.
 
-It's *much* easier to enable a lot of warnings at the start of a project than
+It's _much_ easier to enable a lot of warnings at the start of a project than
 later, because you may end up having to resolve a lot of violations. Be
 aggressive when selecting warnings when you start, and disable later if you're
 over encumbered by them.
@@ -232,11 +232,11 @@ Compiler references:
 - https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
 - https://clang.llvm.org/docs/DiagnosticsReference.html
 
-*Note- these examples use the `-Werror=*` form, which will cause an error even
-if `-Werror` is not enabled*
+_Note- these examples use the `-Werror=`form, which will cause an error even
+if`-Werror` is not enabled_
 
 - `-Wall -Werror` minimum, more is better (`-Weverything` on clang... for the
-brave!)
+  brave!)
 - `-Werror=conversion` - C is statically but weakly typed; the compiler will
   insert implicit type conversions based on variable types in an expression.
   This can result in subtle but disastrous data value effects. This warning can
@@ -280,10 +280,10 @@ them, and as many of them as practical!
 
 - [scan-build](https://clang-analyzer.llvm.org/scan-build.html) - another clang
   analyzer utility that does fairly sophisticated program level static analysis.
-  *Note: it can be somewhat difficult to get scan-build operational when
+  _Note: it can be somewhat difficult to get scan-build operational when
   cross-compiling C programs. Don't give up! on programs of non-trivial size
   scan-build for me has without fail detected serious errors that were missed by
-  manual or unit testing.*
+  manual or unit testing._
 
 - [lizard](https://github.com/terryyin/lizard) - easy to use complexity checker
   that works on many languages, including c/cpp
@@ -297,13 +297,13 @@ them, and as many of them as practical!
 
 ## 6. Test your software
 
-> *Chris Lattner,
-cited from this
-[UB white paper](http://www.yodaiken.com/wp-content/uploads/2018/05/ub-1.pdf)* :
+> Chris Lattner, cited from this
+> [UB white paper](http://www.yodaiken.com/wp-content/uploads/2018/05/ub-1.pdf)
+> :
 >
-> *[...] UB is an inseparable part of C programming, [...] this is a depressing
-and faintly terrifying thing. The tooling built around the C family of languages
-helps make the situation less bad, but it is still pretty bad.*
+> [...] UB is an inseparable part of C programming, [...] this is a depressing
+> and faintly terrifying thing. The tooling built around the C family of
+> languages helps make the situation less bad, but it is still pretty bad.
 
 There are many kinds of errors that will persist through static analysis checks.
 
@@ -311,18 +311,18 @@ It's extremely important to test C programs for correctness and unintended
 side-effects. The usual approach is to write unit-level (function-level) tests
 that exercise inputs of functions.
 
-There are *MANY* unit test frameworks that can be used for C software. These are
+There are _MANY_ unit test frameworks that can be used for C software. These are
 some I've used successfully, in order of my personal preference:
 
-|Framework|Features|Comment|
-|---|---|---|
-|https://github.com/cpputest/cpputest|Asserts, test runner, mocks, memory leak detection|Moderate learning curve. Very powerful and concise mocking system|
-|https://github.com/google/googletest|Asserts, test runner, mocks, leak checker|Very popular and widely used. Simple + concise syntax|
-|https://github.com/cgreen-devs/cgreen|Asserts, test runner, mocks, test auto-discovery|Featureful, relatively concise|
-|https://github.com/ThrowTheSwitch/Unity|Asserts, test runner|Simple to set up|
-|https://github.com/ThrowTheSwitch/CMock|Mock generator for Unity|Simple but verbose and boilerplately mock generator|
-|https://github.com/vmg/clar|Asserts, test runner|**Very** simple; used by [libgit2](https://github.com/libgit2/libgit2). **No mocking support**|
-|https://github.com/silentbicycle/theft|Property-based testing, looks simple to set up|
+| Framework                               | Features                                           | Comment                                                                                        |
+| --------------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| https://github.com/cpputest/cpputest    | Asserts, test runner, mocks, memory leak detection | Moderate learning curve. Very powerful and concise mocking system                              |
+| https://github.com/google/googletest    | Asserts, test runner, mocks, leak checker          | Very popular and widely used. Simple + concise syntax                                          |
+| https://github.com/cgreen-devs/cgreen   | Asserts, test runner, mocks, test auto-discovery   | Featureful, relatively concise                                                                 |
+| https://github.com/ThrowTheSwitch/Unity | Asserts, test runner                               | Simple to set up                                                                               |
+| https://github.com/ThrowTheSwitch/CMock | Mock generator for Unity                           | Simple but verbose and boilerplately mock generator                                            |
+| https://github.com/vmg/clar             | Asserts, test runner                               | **Very** simple; used by [libgit2](https://github.com/libgit2/libgit2). **No mocking support** |
+| https://github.com/silentbicycle/theft  | Property-based testing, looks simple to set up     |
 
 ## 6.a. Test coverage
 
@@ -330,7 +330,7 @@ Lots of opinions on test coverage.
 
 **0% coverage is certainly not ideal!**
 
-It can be *very* helpful when guiding your testing efforts, especially if you're
+It can be _very_ helpful when guiding your testing efforts, especially if you're
 not using a strict TDD process.
 
 Tracking test coverage in your build system / CI is usually pretty simple with
@@ -372,16 +372,14 @@ tests that are not used to evaluate relative or absolute computation cost for
 the software under test (in those cases I think I'd use a separate test system).
 
 The three I recommend are:
-- [Address
-  Sanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer)
-- [Leak
-  Sanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizer)
-- [Undefined Behavior
-  Sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
+
+- [Address Sanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer)
+- [Leak Sanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizer)
+- [Undefined Behavior Sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 
 In gcc and clang you can enable these when building an executable by applying
-these flags to your compile + link commands: `-fsanitize=address -fsanitize=leak
--fsanitize=undefined`
+these flags to your compile + link commands:
+`-fsanitize=address -fsanitize=leak -fsanitize=undefined`
 
 Here's an example of what ASAN can do for you:
 
@@ -400,7 +398,7 @@ int main(int argc, char **argv) {
 }
 ```
 
-*Note that cppcheck detects the above error:*
+_Note that cppcheck detects the above error:_
 
 ```bash
 ➜ cppcheck --enable=all test.c
@@ -428,7 +426,6 @@ example:
 ```
 
 Here's an example:
-
 
 `foo.c`:
 
@@ -546,5 +543,5 @@ There are (at least) 2 considerations to note above:
 1. `__attribute__((format(printf, 2, 3)))` - this allows the compiler to do
    printf-format arg checking (eg checking types, lengths)
 2. using `##__VA_ARGS__` in the definition of a variadic macro; this permits
-   writing the macro without params: `MY_DEBUG_LOGGER("yolo")`
-   See: https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html
+   writing the macro without params: `MY_DEBUG_LOGGER("yolo")` See:
+   https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html
