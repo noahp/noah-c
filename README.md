@@ -322,6 +322,7 @@ some I've used successfully, in order of my personal preference:
 |https://github.com/ThrowTheSwitch/Unity|Asserts, test runner|Simple to set up|
 |https://github.com/ThrowTheSwitch/CMock|Mock generator for Unity|Simple but verbose and boilerplately mock generator|
 |https://github.com/vmg/clar|Asserts, test runner|**Very** simple; used by [libgit2](https://github.com/libgit2/libgit2). **No mocking support**|
+|https://github.com/silentbicycle/theft|Property-based testing, looks simple to set up|
 
 ## 6.a. Test coverage
 
