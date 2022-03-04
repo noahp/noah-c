@@ -2,8 +2,6 @@
 
 Small collection of notes for myself on using the C programming language.
 
-<!-- vim-markdown-toc GFM -->
-
 - [🌊 Notes on using the C language](#-notes-on-using-the-c-language)
   - [1. C style / usage notes](#1-c-style--usage-notes)
     - [1.1 Use struct operations for struct data classes](#11-use-struct-operations-for-struct-data-classes)
@@ -25,8 +23,6 @@ Small collection of notes for myself on using the C programming language.
   - [9. `-fstack-protector`](#9--fstack-protector)
   - [10. Hardening checker](#10-hardening-checker)
   - [11. `printf` wrappers](#11-printf-wrappers)
-
-<!-- vim-markdown-toc -->
 
 ## 1. C style / usage notes
 
@@ -314,15 +310,15 @@ that exercise inputs of functions.
 There are _MANY_ unit test frameworks that can be used for C software. These are
 some I've used successfully, in order of my personal preference:
 
-| Framework                               | Features                                           | Comment                                                                                        |
-| --------------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| https://github.com/cpputest/cpputest    | Asserts, test runner, mocks, memory leak detection | Moderate learning curve. Very powerful and concise mocking system                              |
-| https://github.com/google/googletest    | Asserts, test runner, mocks, leak checker          | Very popular and widely used. Simple + concise syntax                                          |
-| https://github.com/cgreen-devs/cgreen   | Asserts, test runner, mocks, test auto-discovery   | Featureful, relatively concise                                                                 |
-| https://github.com/ThrowTheSwitch/Unity | Asserts, test runner                               | Simple to set up                                                                               |
-| https://github.com/ThrowTheSwitch/CMock | Mock generator for Unity                           | Simple but verbose and boilerplately mock generator                                            |
-| https://github.com/vmg/clar             | Asserts, test runner                               | **Very** simple; used by [libgit2](https://github.com/libgit2/libgit2). **No mocking support** |
-| https://github.com/silentbicycle/theft  | Property-based testing, looks simple to set up     |
+| Framework                                 | Features                                           | Comment                                                                                        |
+| ----------------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| https://github.com/cpputest/cpputest      | Asserts, test runner, mocks, memory leak detection | Moderate learning curve. Very powerful and concise mocking system                              |
+| https://github.com/google/googletest      | Asserts, test runner, mocks, leak checker          | Very popular and widely used. Simple + concise syntax                                          |
+| https://github.com/cgreen-devs/cgreen     | Asserts, test runner, mocks, test auto-discovery   | Featureful, relatively concise                                                                 |
+| https://github.com/ThrowTheSwitch/Unity   | Asserts, test runner                               | Simple to set up                                                                               |
+| https://github.com/ThrowTheSwitch/CMock   | Mock generator for Unity                           | Simple but verbose and boilerplately mock generator                                            |
+| https://github.com/vmg/clar               | Asserts, test runner                               | **Very** simple; used by [libgit2](https://github.com/libgit2/libgit2). **No mocking support** |
+| https://github.com/silentbicycle/greatest | Asserts, test runner                               | Simple to use, not a ton of features. See the companion `theft` property tester.               |
 
 ## 6.a. Test coverage
 

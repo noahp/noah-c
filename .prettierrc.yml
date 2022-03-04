@@ -1,0 +1,9 @@
+overrides:
+  - files: "*.md"
+    options:
+      proseWrap: always
+  - files: "*.css"
+    tabWidth: 4
+  - files: "*.jinja2"
+    options:
+      parser: html
