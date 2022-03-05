@@ -2,6 +2,8 @@
 
 Small collection of notes for myself on using the C programming language.
 
+<!-- markdown-toc-cli -->
+
 - [🌊 Notes on using the C language](#-notes-on-using-the-c-language)
   - [1. C style / usage notes](#1-c-style--usage-notes)
     - [1.1 Use struct operations for struct data classes](#11-use-struct-operations-for-struct-data-classes)
@@ -23,6 +25,8 @@ Small collection of notes for myself on using the C programming language.
   - [9. `-fstack-protector`](#9--fstack-protector)
   - [10. Hardening checker](#10-hardening-checker)
   - [11. `printf` wrappers](#11-printf-wrappers)
+
+<!-- markdown-toc-cli-end -->
 
 ## 1. C style / usage notes
 
